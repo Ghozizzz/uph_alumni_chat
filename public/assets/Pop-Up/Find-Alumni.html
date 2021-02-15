@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Alumni - UPH | Universitas Pelita Harapan</title>
+    <meta name="description" content="">
+    <meta name="format-detection" content="telephone=no">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="Alumni - UPH | Universitas Pelita Harapan">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="../js/jquery-3.5.1.min.js"></script>
+    <script src="../js/bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/fontawesome/css/all.min.css">
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <button class="btn link-find-alumni lg-btn" type="button" data-toggle="modal" data-target="#modal-find-alumni">Find Alumni</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-find-alumni" tabindex="-1" role="dialog" aria-labelledby="ModalAccount"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-find-alumni" role="document">
+            <div class="modal-content">
+                <div class="before-menu">
+                    <button type="button" class="close close-modal-btn" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-circle fa-stack-2x"></i>
+                        <i class="far fa-times-circle fa-stack-1x"></i>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <img src="../img/ASSETS-LOGIN/pic-popup.jpg" class="w-100" />
+                    <div class="container">
+                        <div class="pr-4">
+                            <p class="modal-card-title mt-0 text-blue">Welcome to Alumni Reconnect Feature</p>
+                            <p class="modal-card-text">Get in touch with fellow Alumni</p>
+                        </div>
+                        <button type="button" class="btn w-100 lg-btn">BROWSE ALUMNI</button>
+                        <hr>
+                        <form class="text-center">
+                            <input type="checkbox" id="showMessage" name="showMessage" />
+                            <label for="showMessage" class="mb-0">don't show this message next time</label><br>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".link-find-alumni").click(function () {
+                $(".modal-dialog").eq(0).css("display", "flex");
+                $(".modal-body form").eq(0).css("display", "block");
+            });
+        });
+    </script>
+</body>

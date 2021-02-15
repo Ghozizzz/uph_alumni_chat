@@ -1,0 +1,17 @@
+.news-body {
+	height: 200px;
+}
+
+.btn_upload {
+	background-color: #27AAE1;
+}
+.btn_upload:hover {
+	background-color: #27AAE1;
+}
+
+.w-80{
+	width: 80% !important;
+}
+.w-10{
+	width: 10% !important;
+}
