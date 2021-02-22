@@ -1627,7 +1627,7 @@ option:not(:first-of-type){
 
 .modal-body p{
     font-size: 15px;
-    margin-top: 9px;
+    /* margin-top: 9px; */
 }
 
 .modal-body .form-group{

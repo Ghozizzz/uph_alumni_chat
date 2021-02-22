@@ -2,32 +2,38 @@
     <div class="row">
         <div class="col-md-3">
             <ContactsList :contacts="contacts" @selected="startWith"/>
-            <button type="button" class="btn link-browse-alumni md-btn w-100"
-                data-toggle="modal" data-target="#modal-browse-alumni">FIND
+            <button type="button" class="btn link-browse-alumni md-btn w-100" @click="showModal">FIND
                 ALUMNI</button>
         </div>
         <div class="col-md-9">
             <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage" @newAttach="saveNewMessage"/>
         </div>
+        <FindModal ref="modal" :studys="this.c_study" :batchs="this.c_batch" :issending="sending"
+            @selected="startWithNew"/>
    </div>
 </template>
 
 <script>
 import Conversation from './Conversation';
 import ContactsList from './ContactsList';
+import FindModal from './FindModal';
 
 export default {
     props: {
         user: {
             type: Object,
             required:true
-        }
+        },
+        c_study: Array,
+        c_batch: Array,
+        nim: Array
     },
     data() {
         return {
             selectedContact: null,
             messages: [],
-            contacts: []
+            contacts: [],
+            sending: true
         }
     },
     mounted() {
@@ -41,9 +47,48 @@ export default {
             .then((response)=>{
                 // console.log(response.data);
                 this.contacts = response.data;
+                if(this.nim!=''){
+                    this.startFromParam(this.nim[0]);
+                }
             });
     },
     methods:{
+        showModal() {
+            let element = this.$refs.modal.$el
+            $(element).modal('show')
+        },
+        closeModal() {
+            let element = this.$refs.modal.$el
+            $(element).modal('hide')
+        },
+        startFromParam(students){
+            axios.get('/conversation/'+students.id)
+                .then((response)=> {
+                    this.messages = response.data;
+                    this.selectedContact = students;
+                })
+                    
+                const item = this.contacts.find(el => el.id == students.id);
+                if(item==null){
+                    console.log('null kan');
+                    this.contacts.push(students);
+                }
+        },
+        startWithNew(students){
+            // this.updateUnreadCount(this.contact, true);
+
+            axios.get('/conversation/'+students.id)
+                .then((response)=> {
+                    this.messages = response.data;
+                    this.selectedContact = students;
+                    
+                    const item = this.contacts.find(el => el.id == students.id);
+                    if(item==null){
+                        this.contacts.push(students);
+                    }
+                    this.closeModal();
+                })
+        },
         startWith(contact){
             this.updateUnreadCount(contact, true);
 
@@ -88,14 +133,11 @@ export default {
         }
     },
     components: {
-        Conversation, ContactsList
-    }
+        Conversation, ContactsList, FindModal
+    },
 }
 </script>
 <style>
-@import '/assets/css/bootstrap/bootstrap.min.css';
-@import '/assets/css/fontawesome/css/all.min.css';
-@import '/assets/css/style.css';
 /* @import '/assets/css/custom.css'; */
 
 /* <script src="{{ asset('assets/js/custom/effect-fade.js') }}"></script> */

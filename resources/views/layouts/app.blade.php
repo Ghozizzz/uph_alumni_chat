@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -16,17 +15,17 @@
     <link rel="icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="">
     <meta name="csrf-token" content="{{csrf_token()}}">
-    <link href="{{ asset('assets/css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
-    <script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap/bootstrap.min.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome/css/all.min.css') }}">
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
-    <script src="{{ asset('assets/js/custom/effect-fade.js') }}"></script>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
+    {{-- <link href="{{ asset('assets/css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets/js/bootstrap/bootstrap.min.js') }}"></script> --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome/css/all.min.css') }}">
+    {{-- <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet"> --}}
+    <script src="{{ asset('assets/js/custom/effect-fade.js') }}"></script>
 </head>
 
 <body>
@@ -41,84 +40,117 @@
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="#">S2/S3 Program</a>
+                            <a href="https://www.uph.edu/id/admission/graduate#proses-pendaftaran" target="_blank">S2/S3 Program</a>
                         </li>
                         <li class="nav-item">
-                            <a href="Alumni-Partners.html">Corporate Partnership</a>
+                            <a href="{{ config('app.main_url').'partners' }}">{{ __('lang.corporate_partnership') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a href="Alumni-Card.html">Alumni Card</a>
+                            <a href="{{ config('app.main_url').'card' }}">{{ __('lang.alumni_card') }}</a>
                         </li>
+                        @if(Session::has('user'))
                         <li class="nav-item">
-                            <a href="Alumni-Support-Service.html">Services</a>
+                            <a href="{{ config('app.main_url').'services' }}">{{ __('lang.services') }}</a>
                         </li>
+                        @endif
                         <li class="nav-item">
-                            <a href="Alumni-Tracer-Study.html">Tracer Study</a>
+                            <a href="{{ config('app.main_url').'profile' }}">{{ __('lang.tracer_study') }}</a>
+                        </li>
+                        <li class="nav-item pd-side-1">
+                            <a href="#" class="link_no_hover">|</a>
                         </li>
                     </ul>
                 </nav>
             </div>
         </div>
-        <!-- <div class="container-fluid sticky-top header"> -->
+        <!-- <div class="container-fluid sticky-top header">
+            <div class="container"> -->
         <nav class="navbar navbar-expand-lg navbar-light header">
             <div class="container">
                 <button class="navbar-toggler custom-toggler" data-toggle="collapse" data-target="#navbarcontent">
                     <i class="fa fa-bars text-blue"></i>
                 </button>
-                <a class="navbar-brand" href="Alumni-Home.html">
-                    <img src="img/00_ALUMNI_MAIN/ALUMNI-HEADER-LOGO.png" alt="UPH Logo" />
+                <a class="navbar-brand" href="{{ route('home') }}">
+                    <img src="{{ asset('assets/img/00_ALUMNI_MAIN/ALUMNI-HEADER-LOGO.png') }}" alt="UPH Logo" />
                 </a>
-                <button type="button" class="navbar-usericon">
+                <button type="button" class="navbar-usericon link-sign-in" data-toggle="modal"
+                                data-target="#modal-account">
                     <i class="fa fa-user"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarcontent">
                     <div class="mr-auto"></div>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="Alumni-Reconnect.html" class="nav-link">Alumni Reconnect</a>
+                            <a href="{{ config('app.main_url').'reconnect' }}" class="nav-link">{{ __('lang.alumni_reconnect') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a href="Alumni-Stories.html" class="nav-link">Alumni Stories</a>
+                            <a href="{{ config('app.main_url').'stories' }}" class="nav-link">{{ __('lang.alumni_stories') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a href="Alumni-News-Event.html" class="nav-link">News & Events</a>
+                            <a href="{{ config('app.main_url').'news' }}" class="nav-link">{{ __('lang.news_events') }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="Alumni-Job-Listing.html" class="nav-link">Job Listings</a>
-                        </li>
+                        {{-- <li class="nav-item {{ (Request::segment(1)=='job')? 'nav-selected':'' }}">
+                            <a href="{{ route('job') }}" class="nav-link">Job Listings</a>
+                        </li> --}}
+                            @if(Auth::user())
                         <li class="nav-item desktop-dropdown">
-                            <a class="dropdown-item" href="javascript:;" onclick="$('#logout-form').submit();">Log Out</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
+                            <a class="nav-link p-1" id="desktopDropdown" data-toggle="dropdown"
+                                aria-expanded="false">
+                                @if(!empty(Auth::user()->photo))
+                                <img src="{{ config('app.main_url').'img/students/'.Auth::user()->photo }}"
+                                    class="rounded-circle z-depth-0" alt="avatar image" width="40">
+                                @else
+                                <img src="{{ asset('assets/img/default.png') }}"
+                                    class="rounded-circle z-depth-0" alt="avatar image" width="40">
+                                @endif
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="desktopDropdown">
+                                <a class="dropdown-item" href="{{ config('app.main_url').'profile' }}">{{ __('lang.profile') }}</a>
+                                <a class="dropdown-item" href="{{ route('home') }}">{{ __('lang.messages') }}</a>
+                                <a class="dropdown-item" href="{{ config('app.main_url').'profile?a=2' }}">{{ __('lang.settings') }}</a>
+                                <a class="dropdown-item" href="#" onclick="$('#sign-out').submit();">{{ __('lang.logout') }}</a>
+                                <form id="sign-out" method="POST" action="{{ route('logout') }}">
+                                    {{ csrf_field() }}
+                                </form>
+                            </div>
                         </li>
-                        
+                            @else
+                        <li class="nav-item">
+{{--                             <button type="button" class="btn nav-link md-btn link-sign-in" data-toggle="modal"
+                                    data-target="#modal-account">LOGIN</button> --}}
+                            <a href="{{ route('login') }}" class="btn md-btn link-sign-in">{{ __('lang.login') }}</a>
+                        </li>
+                            @endif
+
                         <li class="nav-item subheader-mobile">
-                            <a href="#" class="nav-link">S2/S3 Program</a>
+                            <a href="https://www.uph.edu/id/admission/graduate#proses-pendaftaran" target="_blank" class="nav-link">S2/S3 Program</a>
                         </li>
                         <li class="nav-item subheader-mobile">
-                            <a href="Alumni-Partners.html" class="nav-link">Corporate Partnership</a>
+                            <a href="{{ config('app.main_url').'partners' }}" class="nav-link">{{ __('lang.corpote_partnership') }}</a>
                         </li>
-                        <li class="nav-item subheader-mobile">
-                            <a href="Alumni-Card.html" class="nav-link">Alumni Card</a>
+                        <li class="nav-item subheader-mobile sub-nav-selected">
+                            <a href="{{ config('app.main_url').'card' }}" class="nav-link">{{ __('lang.alumni_card') }}</a>
                         </li>
+                        @if(Session::has('user'))
                         <li class="nav-item subheader-mobile">
-                            <a href="Alumni-Support-Service.html" class="nav-link">Services</a>
+                            <a href="{{ config('app.main_url').'services' }}" class="nav-link">{{ __('lang.services') }}</a>
                         </li>
+                        @endif
                         <li class="nav-item subheader-mobile">
-                            <a href="Alumni-Tracer-Study.html" class="nav-link">Tracer Study</a>
+                            <a href="{{ config('app.main_url').'tracer-study' }}" class="nav-link">{{ __('lang.tracer_study') }}</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </div>
+    <!-- End Header -->
 
     <main class="py-4">
         @yield('content')
     </main>
 
-    <!-- Footer -->
+   <!-- Footer -->
    <footer class="page-footer">
     <div class="container">
         <div class="row footer-top">
@@ -163,5 +195,4 @@
         </div>
     </div>
     <div class="footer-copyright">Copyright © 2020 | UPH Alumni Relations</div>
-  </footer>
-  </div>
+</div>

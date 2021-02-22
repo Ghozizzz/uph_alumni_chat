@@ -6,12 +6,11 @@
     <div class="container">
         <h5 class="text-blue">Messages</h5>
         <hr>
-            {{-- <chat-app :user="{{ auth()->user() }}"></chat-app> --}}
-            <chats :user="{{ auth()->user() }}"></chats>
+            <chats :user="{{ auth()->user() }}" :c_study="{{$study}}" :c_batch="{{$batch}}" :nim="{{$nim}}"></chats>
         <br>
         <div class="row">
             <div class="col-md-3">
-                <button type="button" class="btn lg-btn w-100">BACK TO PROFILE</button>
+                <a href="{{ config('app.main_url').'profile' }}" class="btn lg-btn w-100">BACK TO PROFILE</a>
             </div>
         </div>
     </div>

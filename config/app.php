@@ -223,7 +223,16 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Custom URL
+    |--------------------------------------------------------------------------
+    |
+    | This custom url are made to retrieve shared url between services
+    |
+    */
+    'photo_url' => env('PHOTO_URL'),
+    'main_url' => env('MAIN_URL')
 ];

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
 use App\Message;
+// use App\Students;
 use App\Events\NewMessage;
 use Validator;
-use Storage;
+use DB;
+// use Storage;
 
 class ContactsController extends Controller
 {
@@ -21,8 +22,28 @@ class ContactsController extends Controller
         // $contacts = User::where('id', '!=', auth()->id())->get();
         
         // get all users except the authenticated one
-        $contacts = User::where('id', '!=', auth()->id())->get();
+        // $contacts = Students::where('id', '!=', auth()->id())->get();
 
+        // get all students that we have chat with
+        // $contacts = Students::select(\DB::raw('students.*'))
+        // ->leftJoin('messages', function($join){
+        //     $join->on('students.id','=','messages.to');
+        // })
+        // ->where('messages.from',auth()->id())
+        // ->groupBy('messages.to')
+        // ->get();
+            $contacts = collect(\DB::select('SELECT * FROM (
+                (SELECT s.id, s.name, s.photo, s.acad_prog_desc, S.admit_term FROM students s
+                left join messages m on s.id = m.`to`
+                where m.`from` = '.auth()->id().'
+                group by s.id)
+                    UNION ALL
+                (SELECT s.id, s.name, s.photo, s.acad_prog_desc, S.admit_term FROM students s
+                left join messages m on s.id = m.`from`
+                where m.`to` = '.auth()->id().'
+                group by s.id)
+            ) as s
+                group by s.id'));
         // get a collection of items where sender_id is the user who sent us a message
         // and messages_count is the number of unread messages we have from him
         $unreadIds = Message::select(\DB::raw('`from` as sender_id, count(`from`) as messages_count'))

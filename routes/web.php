@@ -19,9 +19,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes([
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+  ]);
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/students/search', 'HomeController@search')->name('search_students');
 
 Route::get('/contacts', 'ContactsController@get');
 Route::get('/conversation/{id}', 'ContactsController@getMessagesFor');
