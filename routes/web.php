@@ -13,11 +13,11 @@ use App\Events\WebsocketDemoEvent;
 |
 */
 
-Route::get('/', function () {
-    broadcast(new WebsocketDemoEvent('some data'));
+// Route::get('/', function () {
+//     broadcast(new WebsocketDemoEvent('some data'));
 
-    return view('welcome');
-});
+//     return view('welcome');
+// });
 
 Auth::routes([
     'register' => false, // Registration Routes...
@@ -25,7 +25,7 @@ Auth::routes([
     'verify' => false, // Email Verification Routes...
   ]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 Route::post('/students/search', 'HomeController@search')->name('search_students');
 
 Route::get('/contacts', 'ContactsController@get');
